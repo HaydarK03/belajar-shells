@@ -1,0 +1,90 @@
+#!/bin/bash
+
+clear &&
+	giblans=$(printenv)
+if [[ -f coba.txt ]]; then
+	rm coba.txt
+fi
+
+############################
+### MAX TABLE
+############################
+
+countkir=0
+countkan=0
+
+for max in ${giblans[@]}; do
+	vkir=$(echo $max | cut -d = -f 1)
+	vkan=$(echo $max | cut -d = -f 2)
+	nkir=$(echo -n "$vkir" | wc -c)
+	nkan=$(echo -n "$vkan" | wc -c)
+
+	if [[ $nkir -gt $countkir ]]; then
+		countkir=$nkir
+	fi
+	if [[ $nkan -gt $countkan ]]; then
+		countkan=$nkan
+	fi
+done
+
+charmaxs=$(($(tput cols) - $countkir - 7))
+
+# echo "maximum monitor = $(tput cols)"
+# echo "left cloumn = $countkir"
+# echo $charmaxs
+# echo "max kanan : $countkan"
+# echo "max kiri  : $countkir"
+
+##############################
+### TABLE DISPLAY
+##############################
+
+printf "%.*s\n" $(tput cols) "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+printf "%-${countkir}s   | %s \n" "| DESCRIPTION" "Value"
+printf "%.*s\n" $(tput cols) "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+
+for i in ${giblans[@]}; do
+	wkir=$(echo $i | cut -d = -f 1)
+	wkan=$(echo $i | cut -d = -f 2)
+	ckan=$(echo $wkan | wc -c)
+
+	# echo " string leng : $ckan"
+	# echo " max leng : $charmaxs"
+
+	lview=$(printf "%-${countkir}s" $wkir)
+
+	if [[ $ckan -gt $charmaxs ]]; then
+		tcon=$(($charmaxs - 4))
+		rview=$(printf "%.*s ..." $tcon $wkan)
+	else
+		rview=$(printf "%-${charmaxs}s" $wkan)
+	fi
+	echo -ne "| $lview | $rview |\n"
+
+	#printf "%s | %s \n" $lview $rview
+done
+
+printf "%.*s\n" $(tput cols) "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+
+#echo $termins
+#cat coba.txt
+
+#string terpanjang kiri = 37
+#string terpanjang kanan = 140
+
+#for a in ${giblans[@]}; do
+#  n=${#kiri}
+#  echo $n
+#done
+
+#for i in ${giblans[@]}; do
+#	if [[ ! -f test.txt ]]; then
+#		echo "$i |" >test.txt
+#	else
+#		echo "$i |" >>test.txt
+#	fi
+#done
+
+#for a in $(echo $gepengs | tr "=" "\r"); do
+#	echo "$a"
+#done

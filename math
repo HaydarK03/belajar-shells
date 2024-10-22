@@ -1,0 +1,21 @@
+#!/bin/bash
+
+data=(5 10 15 10 7)
+n=1
+
+for num in "${data[@]}"; do
+	((frequency[$num]++))
+done
+
+local result=()
+
+for num in "${data[@]}"; do
+	if [ ${frequency[$num]} -le $n ]; then
+		result+=($num)
+	fi
+done
+
+echo "${result[@]}"
+
+echo "${data[@]}"
+echo "${frequency[@]}"
